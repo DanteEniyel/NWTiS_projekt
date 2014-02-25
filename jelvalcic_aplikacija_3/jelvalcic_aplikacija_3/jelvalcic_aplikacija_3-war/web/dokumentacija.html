@@ -1,0 +1,280 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>jelvalcic</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body style="text-align: justify; background-color: cornsilk;">
+        <div>
+            <h1>Projektna dokumentacija</h1>
+            <h2>Jelena Valcic, 41648/12-R</h2>
+            <h2>Projekt iz kolegija Napredne web tehnologije i servisi</h2>            
+        </div>
+        <a href="javadoc1/index.html">Java doc za prvu aplikaciju</a><br/>
+        <a href="javadoc2_1/index.html">Java doc za drugu aplikaciju - EJB modul</a><br/>
+        <a href="javadoc2_2/index.html">Java doc za drugu aplikaciju - web modul</a><br/>
+        <a href="javadoc3_1/index.html">Java doc za trecu aplikaciju - EJB modul</a><br/>
+        <a href="javadoc3_1/index.html">Java doc za trecu aplikaciju - web modul</a><br/>
+
+        <div>
+            <h1>Opis projektnog zadatka (tekst zadatka)</h1>
+            <p><i>prema uputama s Moodlea:</i></p>
+            <p>Sustav se treba sastojati od sljedecih aplikacija:</p>
+            <pre>1. web aplikacija ({korisnicko_ime}_aplikacija_1) u pozadinskom modu (tj. servletu 
+                s automatskim startanjem ili putem slušača), pokreće dretvu (konfiguracijom se 
+                određuje pravilni vremenski interval (jedinica je sekunda) preuzimanja podataka, 
+                npr.  30  sec,  100  sec,  2  min,10  min,  30  min,  60  min, ...)  koja  preuzima  važeće 
+                meteorološke  podatke  od  WeatherBug  web  servisa  za  izabrani  skup  gradova  iz 
+                SAD  (njihovi  zip  kodovi  i  tko  je  zatražio  nalaze  se u  tablici 
+                {korisnicko_ime}_activezipcodes).  Potrebno  je  spremati  minimalno  5 
+                meteoroloških podataka (temp, tlak, vlaga, vjetar,  i sl) u bazu podataka. Budući 
+                da se za određeni zip kod može vratiti meteorološki podatak u kojem stoji neki 
+                drugi  zip  kod  (s  drugim  nazivom  grada  i  koordinatama),  potrebno  je  upisati  u 
+                tablicu oba zip koda (zahtijevani i vraćeni). Osnova je uvijek zahtijevani zip kod 
+                dok  je  vraćeni  samo  dodatna  informacija  koja  je  potrebna  za  neke  preglede. 
+                Upravljanje pozadinskom dretvom provodi se putem primitivnog poslužitelja koji 
+                ima  ulogu  socket  servera  na  određenom  portu  (postavkom  se  određuje).  Kada 
+                poslužitelj  primi  zahtjev  od  klijenta  zapisuje  podatke  u  dnevnik  rada  u  bazu 
+                podataka. Na svaki zahtjev odgovara se u obliku
+                OK nn[dodatni dio koji ovisi o vrsti zahtjeva]
+                nn je status odgovora za primljeni zahtjev. Za administratorski zahtjev prvo treba 
+                obaviti autentikaciju korisnika prema bazi podatakate se ako je u redu, šalje email 
+                poruka (adresa primatelja i predmet poruke određuju se postavkama) u MIME tipu 
+                „text/plain“ s informacijama o komandi (vrijeme izvršavanja, trajanje prethodnog 
+                stanja, broj primljenih, neispravnih i izvršenih korisničkih komandi). Provođenje 
+                spomenutih operacija  ne  smije  utjecati  na  sposobnost  poslužitelja  da  primi  nove 
+                zahtjeve. Zahtjev se temelji na komandama (isključivo u jednom retku), koje mogu 
+                biti: 
+                administratorske: 
+                USER korisnik; PASSWD lozinka; 
+                PAUSE; | START; | STOP; | ADD ZIP nnnnn; 
+                korisničke: 
+                USER korisnik; GET ZIP nnnnn; 
+                 Objašnjenje komandi: 
+                •  USER  korisnik;  PASSWD  lozinka;  –  autentikacija  korisnika. 
+                Prelazi na obradu komande ako postoji korisnik i odgovara lozinka, odnosno 
+                vraća OK 30 ako ne postoji korisnik ili ne odgovara lozinka. 
+                •  PAUSE  –  privremeno  prekida  preuzimanje  meteoroloških  podataka  od 
+                sljedećeg ciklusa (i dalje može preuzimati  korisničke komande). Vraća OK 
+                10 ako nije bio u pauzi, odnosno OK 40 ako je bio upauzi. 
+                •  START  –  nastavlja  s  preuzimanjem  meteoroloških  podataka  od  sljedećeg 
+                ciklusa.  Vraća  OK  10  ako  je  bio  u  pauzi,  odnosno  OK  41  ako  nije  bio  u 
+                pauzi. 
+                •  STOP – potpuno prekida preuzimanje meteoroloških podataka i preuzimanje 
+                korisničkih komandi. Vraća OK 10 ako nije bio u postupku prekida, odnosno 
+                OK 42 ako je bio u postupku prekida. 
+                •  ADD  ZIP  nnnnn  –  dodaje  zip  kod  za  preuzimanje  meteoroloških 
+                podataka od sljedećeg ciklusa. Vraća OK 10 ako ne postoji u evidenciji zip 
+                kodova  za  koje  se  preuzimaju  meteorološki  podaci,  odnosno  OK  42  ako 
+                postoji i za njega se većpreuzimaju podaci. 
+                •  TEST  ZIP  nnnnn  –  vraća  status  za  zip  nnnnn  tj.  da  li  se  za  njega 
+                preuzimaju podaci. Vraća OK 10 ako postoji u evidenciji zip kodova za koje
+                se preuzimaju meteorološki podaci, odnosno OK 44 ako ne postoji.
+                •  GET ZIP nnnnn  – vraća meteorološke podatke za zip nnnnn. Vraća OK 
+                10 i
+                TEMP  nn.nn  VLAGA  nn.nn  TLAK  nnnn.nn  GEOSIR  {-}nnn.nnnnnn GEODUZ {-}nnn.nnnnnn 
+                ako  postoji  u  evidenciji  zip  kodova  za  koje  se  preuzimaju  meteorološki 
+                podaci, odnosno, OK 43 ako ne postoji. 
+                Važeći  meteorološki  podaci  preuzimaju  se  putem  operacije
+                GetLiveWeatherByUSZipCode s  WeatherBugWebServices  web  servisa 
+                http://api.wxbug.net/weatherservice.asmx  čiji  je  WSDL 
+                http://api.wxbug.net/weatherservice.asmx?WSDL. Potrebno je obaviti registraciju 
+                da  bi  se  mogao  koristiti  web  servis.  Adresa 
+                http://weather.weatherbug.com/desktop-weather/api.html.  Drugi  zadatak  web 
+                aplikacije je pružanje web servisa za prikupljene meteorološke podatke kao što su 
+                operacije:  popis  svih  zip  kodova  za  koje  se  prikupljaju  meteorološki  podaci, 
+                trenutni meteorološki podaci za izabrani zip kod, rang lista (prvih n) zip kodova 
+                za  koje  je  prikupljeno  najviše  meteoroloških  podataka,  posljednjih  n 
+                meteoroloških podataka za izabrani zip code, meteorološki podaci za zip code u 
+                nekom  vremenskom  intervalu  (od  Date,  do  Date)  i  sl. Potrebno  je  pripremiti  u 
+                NetBeans-ima za testiranje vlastitog web servisa. Treći zadatak je vidljivi dio web 
+                aplikacije  odnosno  korisnički  dio  koji  treba  sadržavati  pregled  prikupljenih 
+                meteoroloških  podataka,  pregled  zahtjeva  za  server  koji  upravlja  dretvom  i 
+                pregled dnevnika korisničkih zahtjeva (kasnije opisano) putem JSP (bez skripleta) 
+                i  displaytag-a  uz  filtriranje  podataka  (elementi  za filtriranje:  izabrani  zip  kod, 
+                vremenski  interval   (od-do,  u  formatu  d.d.MM.yyyy  hh.mm.ss)  u  kojem  su 
+                prikupljeni podaci i sl.), status i straničenje (izbor od od 5, 10, 20, 50, 100, svi). 
+                Filtriranje treba omogućiti korištenje od ni jednog pa do svih elemenata u  istom 
+                pogledu.  Korisnički  dio  web  aplikacije  treba  biti  zaštićen  putem  web/servlet 
+                kontejnera na bazi obrasca/forme za prijavljivanje  uz pomoćJDBC pristupa do 
+                baze podataka te osiguranja sigurnog kanala (SSL uz vlastiti certifikat s imenom i 
+                prezimenom studenta).  Četvrti zadatak je vođenje dnevnika korisničkih zahtjeva 
+                vidljivog  dijela  aplikacije  na  bazi  aplikacijskog  filtera  uz  zapis  trajanje  obrade 
+                zahtjeva u bazu podataka. U tablici prikupljenih meteoroloških podataka trebaju 
+                biti podaci za minimalno 20 zip kodova/gradova i zasvaki od njih minimalno 100 
+                preuzetih podataka u vremenskom intervalu većem od zadnjih 6 sati. 
+            </pre>
+
+            <pre>
+                2. enterprise  aplikacija  ({korisnicko_ime}_aplikacija_2)  koja  ima  EJB  i  Web 
+                module. Aplikacija u pozadinskom modu (tj. servletus automatskim startanjem ili 
+                putem  slušača)  pokreće  dretvu  (konfiguracijom  se  određuje  pravilni  vremenski 
+                interval rada (jedinica je sekunda), npr. 5 sec, 20sec, 100 sec, ...) koja provjerava 
+                u poštanskom sandučiću (adresa poslužitelja, korisničko ime i lozinka definiraju 
+                se u konfiguracijskoj datoteci) pristiglu poštu. Odpristiglih email poruka one koje 
+                imaju  predmet  poruke  prema  postavkama  i  MIME  tip  „text/plain“  nazivamo 
+                NWTiS  porukama.  Obrađene  NWTiS  poruke  treba  prebaciti  u  mapu/direktorij 
+                prema postavkama za NWTiS poruke. Ostale ne-NWTiS poruke treba prebaciti u 
+                mapu/direktorij prema postavkama za ne-NWTiS poruke.Na kraju svake iteracije 
+                obrade email poruka treba poslati JMS poruku (nazivreda  čekanja 1) s podacima 
+                o  vremenu  početka  i  završetka  rada,  broju  pročitanih  poruka,  broju  NWTiS 
+                poruka  i  sl.  Poruka  treba  biti  u  obliku  ObjectMessage,  pri  čemu  je  naziv  klase 
+                proizvoljan, a njena struktura treba sadržavati potrebne podatke koji su prethodno 
+                spomenuti. 
+                Drugi zadatak je korisnički dio odnosno web modul, koji treba realizirati putem 
+                JSF  (facelets)  ili  OpenFaces  uz  minimalno  dvojezičnu  varijantu  (hrvatski  i 
+                engleski jezik). To znači da svi statički tekstovi u pogledima trebaju biti označeni 
+                kao  „labele“  i  dobiti  jezične  prijevode.  Jezik  se  odabire  na  početnoj  stranici 
+                aplikacije. U javnom dijelu aplikacije može se dobiti pregled zip kodova za koje 
+                se  u  {korisnicko_ime}_aplikacija_1  prikupljaju  meteorološki  podaci,  zadnji 
+                meteorološki  podaci  za  taj  skup  zip  kodova  i  sl.  Kod  pregleda  treba  postojati 
+                straničenje  i  filtriranje  zip  kodova  na  temelju  naziv  grada.  Pri  toma  se  koristi 
+                Ajax-om  za  preuzimanje  podataka.  Privatni  dio  treba se  štititi  putem 
+                aplikacijskog filtra koji propušta samo prijavljenog korisnika, a ostale prebacuje 
+                na prijavljivanje.  Prvi  korak  za novog korisnika  je registracija. Korisnik nakon 
+                prijavljivanja  mora  kreirati  svoj  meteorološki  portfolio  ukoliko  ga  još  nema,  s 
+                time  da  ih  može  imati  više.  Meteorološki  portfolio  ima  svoj  identifikator  (tj. 
+                naziv kao jednu riječ). Korisnik kod definiranja pojedinog portfolia određuje listu 
+                zip kodova koji ulaze u portfolio, na bazi filtriranje države, grada i zip kodova. 
+                Korisnik  započinje  rad  izborom  države  (1  ili  više),  prikazom  njenih  gradova, 
+                izborom grada (1 ili više), prikazom njegovih zip kodova i izborom zip koda (1 
+                ili  više).  Pri  toma  se  koristi  Ajax-om  za  preuzimanje  podataka.  Minimalni  i 
+                maksimalan broj zip kodova za portfolio određuje se postavkama. Nakon što se 
+                spremi portfolio slijedi provjera statusa preuzimanja meteoroloških podataka za 
+                zip kodove iz portfolia. Provjeravaju se podaci u odnosu na definiranu operaciju 
+                web  servisa  iz  {korisnicko_ime}_aplikacija_1.  Za  zip kod  za  koji  se  ne 
+                prikupljaju podaci potrebno je poslati JMS poruku (naziv reda čekanja 2) u kojoj 
+                se nalazi zip kod za koji treba početi prikupljati meteorološke podatke. Poruka 
+                treba biti  u obliku ObjectMessage,  pri  čemu  je  naziv klase proizvoljan  a njena 
+                struktura treba sadržavati potrebne podatke koji suprethodno spomenuti. Dodatni 
+                bodovi  mogu  se  dobiti  ako  se  za  prikaz  izabranih  zip  kodova  za  portfolio  i 
+                njihovih  podataka  (npr.  koordinate,  trenutna  temp  i sl.)  koristi  Google  Maps 
+                JavaScript API. 
+                Prijavljeni  korisnik  može  pregledavati  trenutne,  povijesne  (od-do)  i  sl. 
+                meteorološke podatke za zip kodove izabranog portfolia, uz straničenje, na bazi 
+                web  servisa  koje  pruža  {korisnicko_ime}_aplikacija_1.  Kod  pregleda 
+                meteoroloških  podataka  potrebno  je  prikazati  i  zahtijevani  i  vraćeni  zip  kod  te 
+                njihovu zračnu udaljenosti. Ako se razlikuju ti zip kodovi, za zahtijevani zip kod 
+                koordinate se preuzimaju iz tablice ZIP_CODES. 
+                Administrator sustava može pregledavati poruke u poštanskom sandučiću (adresa 
+                poslužitelja,  korisničko  ime  i  lozinka definiraju  se  u konfiguracijskoj  datoteci). 
+                Pri tome može izabrati mapu/direktorij u kojem pregledava poruke. Nazivi mapa 
+                preuzimaju  se  od  mape  poštanskog  sandučića  korisnika  email  poslužitelja. 
+                Izabrane poruke može obrisati. Administrator sustava može pregledavati dnevnik 
+                rada uz filtriranje (vremenski interval od-do, korisniki sl) i straničenje. 
+                Četvrti zadatak je pružanje popisa aktivnih (trenutno prijavljenih) Web korisnika, 
+                popisa  portfolia  izabranog  korisnika  (na  bazi  putanje),  popis  zip  kodova  iz 
+                izabranog  portfolia  izabranog  korisnika  (na  bazi  putanje)  putem  RESTful  web 
+                servisa. 
+                Pristup do podataka u bazi podataka treba biti realiziran putem ORM-a tj. putem 
+                session, entity bean-ova i criteria API.
+            </pre>
+
+            <pre>3. enterprise   aplikacija  ({korisnicko_ime}_aplikacija_3)  koja  ima  EJB  i  Web 
+                module. Aplikacija preuzima dvije vrste JMS poruka(kao MessageDriven Bean) 
+                za  stanje  obrade  email  poruka  i  zip  kod  za  koji  treba  početi  preuzimati 
+                meteorološke podatke o pregled podataka meteorološke prognoze. Kod primitka 
+                JMS poruke za zip kod potrebno je provjeriti statusprikupljanja meteoroloških 
+                podataka  za  traženi  zip  kod  putem  slanja  zahtjeva  socket  serveru  iz 
+                {korisnicko_ime}_aplikacija_1  (postavkom  se  određuje  adresa  i  port).  Ukoliko 
+                se  još  ne  prikupljaju  podaci,  šalje  se  zahtjev  da  se  počne  s  preuzimanje 
+                meteoroloških  podataka  za  traženi  zip  kod.  Primljene  poruke  se  spremaju  u 
+                memoriji  aplikacije.  Ako  aplikacija  prestaje  s  radom,  potrebno  je  poruke 
+                serializirati  na  vanjski  spremnik  (naziv  datoteke  u postavkama,  smještena  u 
+                WEB-INF direktoriju). Kada se aplikacija podiže potrebno je učitati serializirane 
+                poruke  (ako  postoji  datoteka)  u  memoriju  aplikacije.  Web  modul  aplikacije 
+                koristi JSF (facelets) ili OpenFaces za pregled spremljenih JMS poruka. Korisnik 
+                može  brisati  izabrane  poruke  ili  sve  poruke.  Korisnik  može  pozivom  RESTful 
+                web  servisa  dohvatiti  i  ispisati  podatke  za  aktivne korisnike 
+                {korisnicko_ime}_aplikacija_2, za neko korisničko ime ispisati nazive njegovih 
+                portfolia  ili  ispisati  zip  kodove  za  izabrani  portfolio.  Za  jedan  od  prethodno 
+                ispisanih  zip  kodova  može  tražiti  trenutne  meteorološke  podatke  putem  slanja 
+                zahtjeva socket serveru iz {korisnicko_ime}_aplikacija_1 te ih ispisati. 
+            </pre>
+
+
+            <pre>Sustav se temelji na dvije baze podataka sa sljedecim osobinama:
+                1. MySQL baza podataka (nwtis_{korisnickoime}_bp_1) za prvu aplikaciju, treba
+                sadržavati tablice: {korisnicko_ime}_zipcodes i ostale koje su potrebne za rad.
+                2. Java DB – Derby baza podataka (nwtis_{{korisnickoime}_bp_2) za trecu aplikaciju,
+                treba sadržavati tablice: cities, counties, states, zip_codes i ostale koje su potrebne za
+                rad.</pre>
+        </div>
+        <div>
+            <h2>Opis rjesenja</h2>
+            <p>
+
+            </p>
+            
+            <p>
+                Prva aplikacija je ostvarena u velikoj većini, podrzane su sve stavke osim aplikacijskog kontejnera i sigurnosti putem SSL-a. 
+                Druga aplikacija je ima zavrsenost oko 60%. Ostvarene su glavne funkcionalnosti za rad, te bitne funkcionalnosti koje uvjetuju rad
+                aplikacije 3. Dijelovi koji nisu ostvareni su stranicenja i filtriranje na pregledima podataka, kreiranje i azuriranje portfolia,
+                izracun udaljenosti i pregled dnevnika rada, takoder registracija i RESTful servis za gledanje portfolia korisnika i zip kodove.
+                treca aplikacija je ostvarena 75%, dijelovi koji nisu ostvareni su serijalizacija i deserijalizacija JMS poruka, te RESTful ispis 
+                zip kodova korisnika i portfolia iz aplikacije 2
+            </p>
+            <p>Popis stranica:</p>
+            <ul>
+                <li>Klase projekta i cemu sluze:
+                    <ul>
+                        <li>JednostavniPosluzitelj - sluzi za obradu primljenih komandi i slanje mail poruka</li> 
+                        <li>ObradaMeteoPodataka - sluzi za prikupljanje meteo podataka za aktivne zip kodove</li>
+                        <li>Posrednik - sluzi za upravljanje klasom JednostavniPosluzitelj</li>
+                        <li>WeatherBugKlijent - sluzi za implementaciju operaciju WeatherBug servisa</li>
+                        <li>JelvalcicAplikacija1WS - klasa kojom su definirane operacije vlastitog web servisa</li>
+                        <li>JelvalcicWSAPI - sluzi za implementiranje funkcionalnosti operacija vlastitog servisa</li>
+                        <li>MeteoPodaci - klasa objekta za meteo podatke</li>
+                        <li>ZipKodoviRangLista - klasa objekta za zip kodove</li>
+                        <li>KontrolaPristupa - filter koji sluzi za definiranje pristupa pojedinim stranicama aplikacije obicnim korisnicima</li>
+                        <li>KontrilaPristupaAdmin - filter koji sluzi za definiranje pristupa pojedinim stranicama aplikacije administratoru</li>
+                        <li>Kontroler - sluzi za definiranje putanja prema stranicama aplikacije i provjeru logina korisnika</li>
+                        <li>KorisnickaKonfiguracija - klasa objekta korisnicke konfiguracije koja prosiruje funkcionalnosti BP_konfiguracije</li>
+                        <li>Korisnik - klasa objekta korisnik</li>
+                        <li>NeuspjesnaPrijava - klasa error stranice ukoliko dode do neuspjesnog logina</li>
+                        <li>ProvjeraKorisnika - klasa prijave koja vrsi provjeru korisnika u bazi podataka</li>
+                        <li>KontekstAplikacije - klasa slusaca za dohvacanje konteksta aplikacije kako bi se moglo prosljedivati drugim klasama po potrebi</li>
+                        <li>SlusacAplikacije - klasa slusaca aplikacije koja inicijalizira korisnicku konfiguraciju i pozadinske dretve</li>
+                        <li>MeteoKlijent - klasa koja implementira operacije vlastitog web servisa</li>
+                        <li>i18n - svojstva za lokalizaciju</li>
+                        <li>RestServisResource - definira funkcionalnost RESTful servisa</li>
+                        <li>KontrolaPrijave - upravlja prijavom korisnika i ostvaruje redirekciju na osnovu prijave</li>
+                        <li>Navigacija - definira putanje redirekcije na osnovu stanja prijave</li>
+                        <li>NeuspjesnaPrijava - definira error stranicu ukoliko je prijava neuspjesna</li>
+                        <li>ObradaPoruke - sluzi za obradu primljenih mail poruka i slanje JMS poruke aplikaciji 3</li>
+                        <li>Pomocna - sluzi kao podrska za prijavu korisnika i postavljanje podataka u sesiju</li>
+                        <li>PomocnoSmetalo - odraduje provjeru prema bazi podataka(ne korisniti se zbog klase Pomocna)</li>
+                        <li>Poruka - klasa objekta poruka</li>
+                        <li>ZipKodoviDB - klasa objekta zip kodova iz baze podataka</li>
+                        <li>SlusacSesije - sluzi za detektiranje promjene prilikom dodavanja podataka u sesiju</li>
+                        <li>Lokalizacija - sluzi za upravljanje lokalizacijom i postavljanje odabranog jezika</li>
+                        <li>OdaberiMapu - sluzi za upravljanje odabira mape prilikom pregleda mail poruka</li>
+                        <li>PregledPoruke - sluzi za upravljanjem pregleda jedne mail poruke</li>
+                        <li>PregledSvihPoruka - sluzi za pregled popisa primljenih poruka unutar odabrane mape</li>
+                        <li>VratiPodatke - implementira nacin koristenja operacija vlastitog web servisa</li>
+                        <li>VratiPodatkeDB - sluzi za provjeru zip kodova portfolia, ispis podataka i slanje JMS poruke aplikaciji 3</li>
+                        <li>ObradaMailJMSPoruke - sluzi za obradu mail JMS poruke iz aplikacije 2</li>
+                        <li>ObradaZipJMSPoruke - sluzi za obradu zip JMS poruke iz aplikacije 3 i slanje zahtjeva jednostavnom posluzitelju aplikacije 1</li>
+                        <li>MailJMSPrimatelj - message driven bean koji slusa dolaske mail JMS poruka aplikacije 2</li>
+                        <li>ZipJMSPrimatelj - message driven bean koji slusa dolaske zip JMS poruka aplikacije 2</li>
+                        <li>SpremacPoruka - sluzi za spremanje primljenih JMS poruka u objekte MailJMSPoruka i ZipJMSPoruka</li>
+                        <li>RestKlijent - sluzi za poziv RESTful servisa iz aplikacije 2 za prikaz aktivnih korisnika</li>
+                        <li>PregledMailJMSPoruka - sluzi za dohvacanje i postavljanje mail JMS poruka za ispis</li>
+                        <li>PregledZipJMSPoruka - sluzi za dohvacanje i postavljanje zip JMS poruka za ispis</li>
+                        <li>RestPodaciKorisnik - sluzi za postavljanje ispisa aktivnih korisnika aplikacije 2 pomocu RESTful servisa</li>
+                        <li>MailJMSPoruka - klasa objekta mail JMS poruke</li> 
+                        <li>ZipJMSPoruka - klasa objekta za zip JMS poruke</li> 
+                    </ul>
+                </li>
+                
+            </ul>
+            
+        </div>
+        <h3>Varazdin, lipanj 2013.</h3>
+
+    </body>
+</html>

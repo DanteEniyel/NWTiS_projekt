@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+
+        <ui:composition template="./predlozak.xhtml">
+
+            <ui:define name="naslov">
+                Pregled Mail JMS poruka
+            </ui:define>
+
+            <ui:define name="top">
+                
+            </ui:define>
+
+            <ui:define name="left">
+                
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form>
+                    <h:commandLink value="Brisi sve poruke" action="#{pregledMailJMSPoruka.obrisiSveMailJMSPoruke()}"/>
+                    <div class="tableContainer">
+
+                        <h:dataTable value="#{pregledMailJMSPoruka.mailPoruka}" var="p" class="tablica" headerClass="zaglavlje"
+                                     bgcolor="" rowClasses="neparni,parni">
+
+                            <f:facet name="header">Mail JMS poruke</f:facet>
+                            <h:column>
+                                <f:facet name="header">Vrijeme početka</f:facet>
+                                <h:outputText value="#{p.vrijemePocetka}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Vrijeme kraja</f:facet>
+                                <h:outputText value="#{p.vrijemeKraja}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Broj pročitanih poruka</f:facet>
+                                <h:outputText value="#{p.brojProcitanihPoruka}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Broj NWTiS poruka</f:facet>
+                                <h:outputText value="#{p.brojNwtisPoruka}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Brisanje poruke</f:facet>
+                                <h:commandLink value="Brisi" action="#{pregledMailJMSPoruka.obrisiMailJMSPoruku(p)}">
+
+                                </h:commandLink>
+                               
+                            </h:column>
+                        </h:dataTable>            
+                    </div>
+                    
+                </h:form>
+            </ui:define>
+
+            <ui:define name="bottom">
+                
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

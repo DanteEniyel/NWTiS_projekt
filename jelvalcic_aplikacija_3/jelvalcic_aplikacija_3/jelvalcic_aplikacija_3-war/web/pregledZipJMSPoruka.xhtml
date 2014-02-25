@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+
+        <ui:composition template="./predlozak.xhtml">
+
+            <ui:define name="naslov">
+                Pregled Zip JMS poruka
+            </ui:define>
+
+            <ui:define name="top">
+                
+            </ui:define>
+
+            <ui:define name="left">
+                
+            </ui:define>
+
+            <ui:define name="content">
+                
+                <h:form>
+                    <h:commandLink value="Brisi sve poruke" action="#{pregledZipJMSPoruka.obrisiSveZipJMSPoruke()}"/>
+                    <div class="tableContainer">
+
+                        <h:dataTable value="#{pregledZipJMSPoruka.zipPoruka}" var="p" class="tablica" headerClass="zaglavlje"
+                                     bgcolor="" rowClasses="neparni,parni">
+
+                            <f:facet name="header">Mail JMS poruke</f:facet>
+                            <h:column>
+                                <f:facet name="header">Vrijeme slanja</f:facet>
+                                <h:outputText value="#{p.vrijemePocetka}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Korisnik</f:facet>
+                                <h:outputText value="#{p.korisnik}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Odabrani zip kod</f:facet>
+                                <h:outputText value="#{p.zipKod}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Brisanje poruke</f:facet>
+                                <h:commandLink value="Brisi" action="#{pregledZipJMSPoruka.obrisiZipJMSPoruku(p)}">
+
+                                </h:commandLink>
+                               
+                            </h:column>
+                        </h:dataTable>            
+                    </div>
+                    
+                </h:form>
+                
+            </ui:define>
+
+            <ui:define name="bottom">
+                
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href="../resources/css/default.css" rel="stylesheet" type="text/css" />
+        <link href="../resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
+        <title><ui:insert name="naslov"></ui:insert></title>
+    </h:head>
+
+    <h:body>
+
+        <div id="top">
+            NWTiS projekt
+            <ui:insert name="top"></ui:insert>
+        </div>
+        <div>
+            <div id="left" style="min-height: 30em">
+                <h:link value="Početna stranica" outcome="index"/><br/>
+                <h:link value="Pregled Mail JMS poruka" outcome="pregledMailJMSPoruka"/><br/>
+                <h:link value="Pregled Zip JMS poruka" outcome="pregledZipJMSPoruka"/><br/>
+                <h:link value="Pregled aktivnih korisnika aplikacije 2" outcome="sesijaRestPregled"/><br/>
+                <h:link value="Pregled dokumentacije" outcome="dokumentacija.html"/><br/>
+                <h:outputLink value="http://www.foi.hr">FOI</h:outputLink><br/>
+                <ui:insert name="left">
+
+
+                </ui:insert>
+            </div>
+            <div id="content" class="left_content" style="min-height: 30em">
+                <ui:insert name="content"></ui:insert>
+            </div>
+        </div>
+        <div id="bottom">
+            Jelena Valčić &copy; 2013
+            <ui:insert name="bottom"></ui:insert>
+        </div>
+
+    </h:body>
+</html>
