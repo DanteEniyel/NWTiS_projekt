@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <f:view locale="#{lokalizacija.odabraniLocale}">
+        <h:head>
+            <title>#{m.indexNaslov}</title>
+            <h:outputStylesheet library="css" name="osnovna.css" />
+        </h:head>
+        <h:body>
+
+            <h:form>
+                <h:outputText value="#{m.indexIzborJezika}"/>
+                <h:selectOneRadio value="#{lokalizacija.odabraniJezik}" onchange="submit()" valueChangeListener="#{lokalizacija.changedJezik}">
+                    <f:selectItems value="#{lokalizacija.jezici}"/>
+                </h:selectOneRadio>
+                <h:commandButton value="#{m.indexPotvrdaJezika}" action="#{lokalizacija.odaberiJezik}" styleClass="gumb"/>
+            </h:form>
+        </h:body>
+    </f:view>
+</html>
+

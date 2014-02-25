@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../predlozak.xhtml">
+
+            <ui:define name="naslov">
+                #{m.pregledMeteoPodatakaNaslov}
+            </ui:define>
+
+            <ui:define name="top">
+                #{m.pregledMeteoPodatakaNaslov}
+            </ui:define>
+
+            <ui:define name="left">
+                
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form>
+                    <div class="tableContainer">
+
+                        <h:dataTable value="#{vratiPodatke.meteoPodaciZaAktivneZipKodove}" var="p" class="tablica2" headerClass="zaglavlje"
+                                     bgcolor="" rowClasses="neparni,parni">
+
+                            
+                            <h:column>
+                                <f:facet name="header">#{m.pregledMeteoPodatakaZaAktivneZipZipKod}</f:facet>
+                                <h:outputText value="#{p.zahtjevaniZipKod}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{m.pregledMeteoPodatakaZaAktivneZipGrad}</f:facet>
+                                <h:outputText value="#{p.zahtjevaniGrad}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{m.pregledMeteoPodatakaZaAktivneZipVraceniZip}</f:facet>
+                                <h:outputText value="#{p.vraceniZipKod}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{m.pregledMeteoPodatakaZaAktivneZipTemperatura}</f:facet>
+                                <h:outputText value="#{p.temperatura}°C"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{m.pregledMeteoPodatakaZaAktivneZipVlaga}</f:facet>
+                                <h:outputText value="#{p.vlaga}%"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{m.pregledMeteoPodatakaZaAktivneZipTlak}</f:facet>
+                                <h:outputText value="#{p.tlak}hP"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{m.pregledMeteoPodatakaZaAktivneZipBrzinaVjetra}</f:facet>
+                                <h:outputText value="#{p.vjetar} km/h"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{m.pregledMeteoPodatakaZaAktivneZipSmjerVjetra}</f:facet>
+                                <h:outputText value="#{p.smjerVjetra}"/>
+                            </h:column>
+                        </h:dataTable>            
+                    </div>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="bottom">
+                
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

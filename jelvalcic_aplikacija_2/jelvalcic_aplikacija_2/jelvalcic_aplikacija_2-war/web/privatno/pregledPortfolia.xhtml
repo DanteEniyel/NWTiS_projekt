@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../predlozak.xhtml">
+
+            <ui:define name="naslov">
+                #{m.pregledPortfoliaNaslov}
+            </ui:define>
+
+            <ui:define name="top">
+                
+            </ui:define>
+
+            <ui:define name="left">
+                
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form>
+                    <h:form id="login-form">
+                        <h:outputText value="#{m.pregledPortfoliaUnesiZipKod}:"/>
+                        <h:inputText value="#{vratiPodatkeDB.zipKod}" id="zipKod"/>
+                        <h:commandButton id="button" value="#{m.pregledPortfoliaDodajZipKod}" action="#{vratiPodatkeDB.provjeriZip()}"/>
+                        <br/>
+
+                        <h:outputLabel value="#{vratiPodatkeDB.status}"></h:outputLabel>
+                    </h:form>
+
+                    <div class="tableContainer">
+
+                        <h:dataTable value="#{vratiPodatkeDB.korisnickiZipKodovi}" var="p" class="tablica2" headerClass="zaglavlje"
+                                     bgcolor="" rowClasses="neparni,parni">
+
+
+                            <h:column>
+                                <f:facet name="header">#{m.pregledAktivnihZipKodovaZipKod}</f:facet>
+                                <h:outputText value="#{p.zipKod}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{m.pregledAktivnihZipKodovaGrad}</f:facet>
+                                <h:outputText value="#{p.imeGrada}"/>
+                            </h:column>
+                        </h:dataTable>            
+                    </div>
+                </h:form>
+                <br/>
+                <br/>
+                <h:form>
+                    <div class="tableContainer">
+
+                        <h:dataTable value="#{vratiPodatkeDB.meteoPodaciZaPortfolioZip}" var="k" class="tablica2" headerClass="zaglavlje"
+                                     bgcolor="" rowClasses="neparni,parni">
+
+
+                            <h:column>
+                                <f:facet name="header">#{m.pregledMeteoPodatakaZaAktivneZipZipKod}</f:facet>
+                                <h:outputText value="#{k.zahtjevaniZipKod}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{m.pregledMeteoPodatakaZaAktivneZipGrad}</f:facet>
+                                <h:outputText value="#{k.zahtjevaniGrad}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{m.pregledMeteoPodatakaZaAktivneZipVraceniZip}</f:facet>
+                                <h:outputText value="#{k.vraceniZipKod}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{m.pregledMeteoPodatakaZaAktivneZipTemperatura}</f:facet>
+                                <h:outputText value="#{k.temperatura}°C"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{m.pregledMeteoPodatakaZaAktivneZipVlaga}</f:facet>
+                                <h:outputText value="#{k.vlaga}%"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{m.pregledMeteoPodatakaZaAktivneZipVlaga}</f:facet>
+                                <h:outputText value="#{k.tlak}hP"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{m.pregledMeteoPodatakaZaAktivneZipBrzinaVjetra}</f:facet>
+                                <h:outputText value="#{k.vjetar} km/h"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">#{m.pregledMeteoPodatakaZaAktivneZipSmjerVjetra}</f:facet>
+                                <h:outputText value="#{k.smjerVjetra}"/>
+                            </h:column>
+                        </h:dataTable>            
+                    </div>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="bottom">
+                
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

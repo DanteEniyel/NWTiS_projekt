@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <f:view locale="#{lokalizacija.odabraniLocale}">
+        <h:head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <link href="./resources/css/default.css" rel="stylesheet" type="text/css" />
+            <link href="./resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
+            <title><ui:insert name="naslov">#{m.indexNaslov}</ui:insert></title>
+        </h:head>
+
+        <h:body>
+
+            <div id="top">
+                <ui:insert name="top">NWTiS projekt</ui:insert>
+            </div>
+            <div>
+                <div id="left">
+                    #{m.predlozakJavniDio}<br/>
+                    <h:link value="#{m.indexNaslov}" outcome="/javno/index"/><br/>
+                    <h:link value="#{m.izbornikPregledAktivnihZipova}" outcome="/javno/pregledAktivnihZipKodova"/><br/>
+                    <h:link value="#{m.izbornikPregledMeteoPodatakaAktivnih}" outcome="/javno/pregledMeteoPodatakaZaAktivneZip"/><br/>
+                    <h:link value="#{m.predlozakPrijava}" outcome="/javno/login"/><br/>
+                    <h:link value="#{m.predlozakRegistracija}" outcome="/javno/registracija"/><br/>
+                    #{m.predlozakKorisnickiDio}<br/>
+                    
+                    #{m.predlozakAdministratorskiDio}<br/>
+                    <h:link value="#{m.indexNaslov}" outcome="/javno/index"/><br/>
+                    <h:outputLink value="http://www.foi.hr">FOI</h:outputLink><br/>
+                    <ui:insert name="left"></ui:insert>
+                </div>
+                <div id="content" class="left_content">
+                    <ui:insert name="content">Content</ui:insert>
+                </div>
+            </div>
+            <div id="bottom">
+                <ui:insert name="bottom">Jelena Valčić &copy; 2013</ui:insert>
+            </div>
+
+        </h:body>
+    </f:view>
+</html>

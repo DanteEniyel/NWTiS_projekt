@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../predlozak.xhtml">
+
+            <ui:define name="naslov">
+                #{m.pregledSvihPorukaNaslov}
+            </ui:define>
+
+            <ui:define name="top">
+                
+            </ui:define>
+
+            <ui:define name="left">
+                
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form>
+                <br/><br/>
+                <h:outputText value="#{m.pregledSvihPorukaOdabirMape}: " />  
+                <h:selectOneMenu value="#{odaberiMapu.ime}">  
+                    <f:selectItems value="#{popisMapa.popisMapa}" /> 
+                </h:selectOneMenu> 
+                <h:commandButton value="#{m.pregledSvihPorukaPrikazi}" action="#{odaberiMapu.posalji()}">
+
+                </h:commandButton>
+                <br/><br/>
+                    <h:dataTable value="#{pregledSvihPoruka.poruke}" var="p" border="1">
+                        <h:column>
+                            <f:facet name="header">#{m.pregledSvihPorukaSalje}</f:facet>
+                            <h:outputText value="#{p.salje}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{m.pregledSvihPorukaVrijeme}</f:facet>
+                            <h:outputText value="#{p.vrijeme}">
+                                <f:convertDateTime pattern="dd.MM.yyyy hh:mm:ss"/>
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{m.pregledSvihPorukaPredmet}</f:facet>
+                            <h:outputText value="#{p.predmet}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{m.pregledSvihPorukaVrstaFormata}</f:facet>
+                            <h:outputText value="#{p.vrsta}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{m.pregledSvihPorukaPregledPoruke}</f:facet>
+                            <h:commandButton value="#{m.pregledSvihPorukaPregledPoruke}" action="#{pregledSvihPoruka.pregledPoruke()}" >
+                                <f:setPropertyActionListener target="#{pregledSvihPoruka.porukaID}" value="#{p.id}"/>
+                            </h:commandButton>
+                        </h:column>
+                    </h:dataTable>
+                <h:commandButton value="#{m.pregledSvihPorukaPrethodnaStranica}" action="#{pregledSvihPoruka.smanjiBrojStranice()}"/>
+                <h:outputLabel for="brojstranice" value="#{m.pregledSvihPorukaBrojStranice}: "/>
+                <h:inputText  value="#{pregledSvihPoruka.brojStranice}" size="4"/>
+                <h:commandButton value="#{m.pregledSvihPorukaSlijedecaStranica}" action="#{pregledSvihPoruka.povecajBrojStranice()}"/>
+                
+                <br/><br/>
+                <h:button outcome="administrator" value="#{m.pregledSvihPorukaPovratakNaAdminStranicu}"/>
+                
+                </h:form>
+            </ui:define>
+
+            <ui:define name="bottom">
+                
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>NWTIS konfiguracija</comment>
+    <entry key="server.database">jdbc:derby://localhost:1527/</entry>
+    <entry key="admin.username">jelvalcic</entry>
+    <entry key="admin.password">nwtis_jelvalcic</entry>
+    <entry key="admin.database">nwtis_jelvalcic_bp_2</entry>
+    <entry key="user.username">jelvalcic</entry>
+    <entry key="user.password">nwtis_jelvalcic</entry>
+    <entry key="user.database">nwtis_jelvalcic_bp_2</entry>
+    <entry key="driver.database.odbc">sun.jdbc.odbc.JdbcOdbcDriver</entry>
+    <entry key="driver.database.mysql">com.mysql.jdbc.Driver</entry>
+    <entry key="driver.database.derby">org.apache.derby.jdbc.ClientDriver</entry>
+    <entry key="driver.database.postgresql">org.postgresql.Driver</entry>
+    
+    <entry key="obradaAdresaPosluzitelja">localhost</entry>
+    <entry key="obradaImapPort">143</entry>
+    <entry key="obradaInterval">15</entry>
+    <entry key="obradaEmailAdresa">servis@nwtis.nastava.foi.hr</entry>
+    <entry key="obradaLozinka">123456</entry>
+    <entry key="obradaPredmet">NWTiS</entry>
+    <entry key="obradaMapaIspravno">Ispravne_Poruke</entry>
+    <entry key="obradaMapaOstalo">Ostale_Poruke</entry>
+        
+    <entry key="korisnikAdresaPosluzitelja">localhost</entry>
+    <entry key="korisnikEmail">servis@nwtis.nastava.foi.hr</entry>
+    <entry key="korisnikLozinka">123456</entry>
+    <entry key="korisnikBrojPrikazanihPoruka">4</entry>
+</properties>

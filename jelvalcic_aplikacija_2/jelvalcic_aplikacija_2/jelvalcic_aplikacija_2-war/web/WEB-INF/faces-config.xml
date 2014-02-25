@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+
+<faces-config version="2.1"
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+
+    <application>
+        <locale-config>
+            <default-locale>hr</default-locale>
+            <supported-locale>en</supported-locale>
+            <supported-locale>de</supported-locale>
+            <supported-locale>hr</supported-locale>
+        </locale-config>
+        <resource-bundle>
+            <var>m</var>
+            <base-name>org.foi.nwtis.jelvalcicapp2.lokalizacija.i18n</base-name>
+        </resource-bundle>
+    </application>
+    <navigation-rule>
+        <from-view-id>/javno/index.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{lokalizacija.odaberiJezik}</from-action>
+            <from-outcome>OK</from-outcome>
+            <to-view-id>/javno/glavnaStranica.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/admin/pregledSvihPoruka.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{pregledSvihPoruka.pregledPoruke()}</from-action>
+            <from-outcome>OK</from-outcome>
+            <to-view-id>/admin/pregledPoruke.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <managed-bean>
+        <managed-bean-name>odaberiMapu</managed-bean-name>
+        <managed-bean-class>org.foi.nwtis.jelvalcicapp2.web.zrna.OdaberiMapu</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>odaberiMapu</from-outcome>
+            <to-view-id>/admin/pregledSvihPoruka.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+</faces-config>
