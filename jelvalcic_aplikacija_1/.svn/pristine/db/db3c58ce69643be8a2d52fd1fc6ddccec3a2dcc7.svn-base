@@ -1,0 +1,45 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.foi.nwtis.jelvalcic.klijenti;
+
+/**
+ *
+ * @author jelvalcic
+ */
+public class JelvalcicWSKlijent {
+
+    public static java.util.List<org.foi.nwtis.jelvalcic.ws.ZipKodoviRangLista> vratiAktivneZipKodove() {
+        org.foi.nwtis.jelvalcic.ws.JelvalcicAplikacija1WS_Service service = new org.foi.nwtis.jelvalcic.ws.JelvalcicAplikacija1WS_Service();
+        org.foi.nwtis.jelvalcic.ws.JelvalcicAplikacija1WS port = service.getJelvalcicAplikacija1WSPort();
+        return port.vratiAktivneZipKodove();
+    }
+
+    public static java.util.List<org.foi.nwtis.jelvalcic.ws.MeteoPodaci> vratiMeteoPodatkeZaZip(java.lang.String zipKod) {
+        org.foi.nwtis.jelvalcic.ws.JelvalcicAplikacija1WS_Service service = new org.foi.nwtis.jelvalcic.ws.JelvalcicAplikacija1WS_Service();
+        org.foi.nwtis.jelvalcic.ws.JelvalcicAplikacija1WS port = service.getJelvalcicAplikacija1WSPort();
+        return port.vratiMeteoPodatkeZaZip(zipKod);
+    }
+
+    public static java.util.List<org.foi.nwtis.jelvalcic.ws.MeteoPodaci> vratiPopisMeteoPodatakaVremenskiInterval(java.lang.String zipKod, java.lang.String odDatum, java.lang.String doDatum) {
+        org.foi.nwtis.jelvalcic.ws.JelvalcicAplikacija1WS_Service service = new org.foi.nwtis.jelvalcic.ws.JelvalcicAplikacija1WS_Service();
+        org.foi.nwtis.jelvalcic.ws.JelvalcicAplikacija1WS port = service.getJelvalcicAplikacija1WSPort();
+        return port.vratiPopisMeteoPodatakaVremenskiInterval(zipKod, odDatum, doDatum);
+    }
+
+    public static java.util.List<org.foi.nwtis.jelvalcic.ws.MeteoPodaci> vratiPopisMeteoPodatakaZaZip(java.lang.String zipKod, int brojPodataka) {
+        org.foi.nwtis.jelvalcic.ws.JelvalcicAplikacija1WS_Service service = new org.foi.nwtis.jelvalcic.ws.JelvalcicAplikacija1WS_Service();
+        org.foi.nwtis.jelvalcic.ws.JelvalcicAplikacija1WS port = service.getJelvalcicAplikacija1WSPort();
+        return port.vratiPopisMeteoPodatakaZaZip(zipKod, brojPodataka);
+    }
+
+    public static java.util.List<org.foi.nwtis.jelvalcic.ws.ZipKodoviRangLista> vratiRangListuZipKodova(int brojZipKodova) {
+        org.foi.nwtis.jelvalcic.ws.JelvalcicAplikacija1WS_Service service = new org.foi.nwtis.jelvalcic.ws.JelvalcicAplikacija1WS_Service();
+        org.foi.nwtis.jelvalcic.ws.JelvalcicAplikacija1WS port = service.getJelvalcicAplikacija1WSPort();
+        return port.vratiRangListuZipKodova(brojZipKodova);
+    }
+    
+    
+    
+}

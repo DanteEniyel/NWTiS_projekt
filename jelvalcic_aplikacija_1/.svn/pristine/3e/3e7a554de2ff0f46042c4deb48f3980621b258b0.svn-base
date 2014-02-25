@@ -1,0 +1,146 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.foi.nwtis.jelvalcic.aplikacija_1;
+
+import static java.lang.Thread.sleep;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.ServletContext;
+import net.wxbug.api.LiveWeatherData;
+import org.foi.nwtis.jelvalcic.klijenti.WeatherBugKlijent;
+import org.foi.nwtis.jelvalcic.web.kontrole.KorisnickaKonfiguracija;
+
+/**
+ *
+ * @author jelvalcic
+ */
+public class ObradaMeteoPodataka extends Thread {
+
+    private KorisnickaKonfiguracija bpKonf = null;
+    private int interval;
+    private String korisnickoIme;
+    private String korisnickaLozinka;
+    private String host;
+    private String imeBaze;
+    private String driver;
+    //dretva
+    private boolean radi;
+    ServletContext context = null;
+    private WeatherBugKlijent wbk = new WeatherBugKlijent();
+    SimpleDateFormat formatiranoVrijeme = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    public ObradaMeteoPodataka() {
+
+        super();
+    }
+
+    public KorisnickaKonfiguracija getBpKonf() {
+        return bpKonf;
+    }
+
+    public void setBpKonf(KorisnickaKonfiguracija bpKonf) {
+        this.bpKonf = bpKonf;
+    }
+
+    public void setContext(ServletContext context) {
+        this.context = context;
+    }
+
+    @Override
+    public synchronized void start() {
+        radi = true;
+        setBpKonf((KorisnickaKonfiguracija) context.getAttribute("BP_Konfiguracija"));
+        interval = bpKonf.getInterval();
+        korisnickoIme = bpKonf.getBpKonfig().getUser_username();
+        korisnickaLozinka = bpKonf.getBpKonfig().getUser_password();
+        imeBaze = bpKonf.getBpKonfig().getUser_database();
+        host = bpKonf.getBpKonfig().getServer_database();
+        driver = bpKonf.getBpKonfig().getDriver_database(host + imeBaze);
+
+        super.start();
+
+    }
+
+    @Override
+    public void run() {
+
+        String upit = "SELECT * FROM  jelvalcic_activezipcodes ";
+        ResultSet odgovor;
+        Statement instr;
+        Connection veza;
+        try {
+            Class.forName(driver);
+        } catch (Exception ex) {
+            ex.fillInStackTrace();
+            System.out.println("Driver ne postoji ili greška kod učitavanja!");
+        }
+
+        try {
+            veza = DriverManager.getConnection(host + imeBaze, korisnickoIme, korisnickaLozinka);
+            instr = veza.createStatement();
+            
+            while (radi) {
+                if (!Posrednik.isPauza()) {
+                    try {
+                        odgovor = instr.executeQuery(upit);
+                        String formatiranDatumVrijeme = formatiranoVrijeme.format(new Date());
+                        while (odgovor.next()) {
+                            String zip = odgovor.getString("ZIP");
+                            String korisnik = odgovor.getString("Korisnik");
+
+                            LiveWeatherData lw = wbk.dajMeteoPodatke(zip);
+                            System.out.println("Grad: " + lw.getCity() + ", Zip: " + zip + ", Pravi zip: " + lw.getZipCode());
+
+                            String upit2 = "INSERT INTO meteo_podaci(ZIP_zahtjevani, ZIP_vraceni, Tlak, Vlaga, Temperatura, Vjetar, Smjer_vjetra, Datum_i_vrijeme) "
+                                    + "VALUES(" + zip + ", " + lw.getZipCode() + ", " + lw.getPressure() + ", " + lw.getHumidity() + ", "
+                                    + lw.getTemperature() + ", " + lw.getWindSpeed() + ", '" + lw.getWindDirection() + "', '" + formatiranDatumVrijeme + "')"; 
+
+                            Statement instr2;
+                            instr2 = veza.createStatement();
+
+                            if(lw.getZipCode() == null){
+                                System.out.println("Meteo servis ne radi za " + zip);
+                            }else{
+                                instr2.executeUpdate(upit2);
+                            
+                            }
+                            
+                        }
+
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ObradaMeteoPodataka.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+                try {
+                    System.out.println("Idem spavati!");
+                    sleep(interval * 1000);
+                    System.out.println("Probudih se!");
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ObradaMeteoPodataka.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+            // veza.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ObradaMeteoPodataka.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    @Override
+    public void interrupt() {
+
+        super.interrupt();
+        radi = false;
+    }
+}

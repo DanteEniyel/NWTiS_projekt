@@ -1,0 +1,74 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.foi.nwtis.jelvalcic.servisi;
+
+import java.util.Date;
+import java.util.List;
+import javax.jws.WebService;
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import sun.util.calendar.Gregorian;
+
+/**
+ *
+ * @author jelvalcic
+ */
+@WebService(serviceName = "JelvalcicAplikacija1WS")
+public class JelvalcicAplikacija1WS {
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "vratiAktivneZipKodove")
+    public List<ZipKodoviRangLista> vratiAktivneZipKodove() {
+        
+        JelvalcicWSAPI azk = new JelvalcicWSAPI();
+                
+        return azk.getPopisAktivnihZipKodova();
+    }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "vratiMeteoPodatkeZaZip")
+    public List<MeteoPodaci> vratiMeteoPodatkeZaZip(@WebParam(name = "zipKod") String zipKod) {
+        JelvalcicWSAPI mpl = new JelvalcicWSAPI();
+        
+        return mpl.getMeteoPodaciLista(zipKod);
+    }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "vratiRangListuZipKodova")
+    public List<ZipKodoviRangLista> vratiRangListuZipKodova(@WebParam(name = "brojZipKodova") int brojZipKodova) {
+        JelvalcicWSAPI rlzk = new JelvalcicWSAPI();
+        
+        return rlzk.getRangListuZipKodova(brojZipKodova);
+    }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "vratiPopisMeteoPodatakaZaZip")
+    public List<MeteoPodaci> vratiPopisMeteoPodatakaZaZip(@WebParam(name = "zipKod") String zipKod, @WebParam(name = "brojPodataka") int brojPodataka) {
+        JelvalcicWSAPI pmp = new JelvalcicWSAPI();
+        
+        return pmp.getPopisMeteoPodatakaZaZipKod(zipKod, brojPodataka);
+    }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "vratiPopisMeteoPodatakaVremenskiInterval")
+    public List<MeteoPodaci> vratiPopisMeteoPodatakaVremenskiInterval(@WebParam(name = "zipKod") String zipKod, @WebParam(name = "odDatum") String odDatum, @WebParam(name = "doDatum") String doDatum) {
+        JelvalcicWSAPI pmpvi = new JelvalcicWSAPI();
+        
+        return pmpvi.getMeteoPodatkeZaZipKodVremenskiInterval(zipKod, doDatum, doDatum);
+    }
+
+    
+    
+}

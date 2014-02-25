@@ -1,0 +1,218 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.foi.nwtis.jelvalcic.servisi;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.ServletContext;
+import org.foi.nwtis.jelvalcic.web.kontrole.KorisnickaKonfiguracija;
+import org.foi.nwtis.jelvalcic.web.slusaci.KontekstAplikacije;
+
+/**
+ *
+ * @author jelvalcic
+ */
+public class JelvalcicWSAPI {
+
+    //baza
+    private String upit = "";
+    private ResultSet odgovor;
+    private Statement instr;
+    private Connection veza;
+    private ServletContext kontekst;
+    private KorisnickaKonfiguracija bpKonf = null;
+    private String korisnickoIme;
+    private String korisnickaLozinka;
+    private String host;
+    private String imeBaze;
+    private String driver;
+    //ostalo
+    private List<ZipKodoviRangLista> popisAktivnihZipKodova = new ArrayList<>();
+    private List<MeteoPodaci> meteoPodaciZaZip = new ArrayList<>();
+    private List<ZipKodoviRangLista> rangListaZipKodova = new ArrayList<>();
+    private List<MeteoPodaci> popisMeteoPodatakaZaZip = new ArrayList<>();
+    private List<MeteoPodaci> popisMeteoPodatakaZaZipVremenskiInterval = new ArrayList<>();
+    
+    public JelvalcicWSAPI() {
+
+        kontekst = KontekstAplikacije.getKontekst();
+        String path = kontekst.getRealPath("WEB-INF") + java.io.File.separator;
+        String datoteka = path + kontekst.getInitParameter("konfiguracija");
+        bpKonf = new KorisnickaKonfiguracija(datoteka);
+        bpKonf = (KorisnickaKonfiguracija) kontekst.getAttribute("BP_Konfiguracija");
+        korisnickoIme = bpKonf.getBpKonfig().getUser_username();
+        korisnickaLozinka = bpKonf.getBpKonfig().getUser_password();
+        imeBaze = bpKonf.getBpKonfig().getUser_database();
+        host = bpKonf.getBpKonfig().getServer_database();
+        driver = bpKonf.getBpKonfig().getDriver_database(host + imeBaze);
+
+        try {
+            Class.forName(driver);
+
+            veza = DriverManager.getConnection(host + imeBaze, korisnickoIme, korisnickaLozinka);
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(JelvalcicWSAPI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public List<ZipKodoviRangLista> getPopisAktivnihZipKodova() {
+        upit = "SELECT jelvalcic_activezipcodes.ZIP, CITY "
+                + "FROM jelvalcic_activezipcodes INNER JOIN zip_codes "
+                + "ON zip_codes.ZIP = jelvalcic_activezipcodes.ZIP;";
+        try {
+            instr = veza.createStatement();
+            odgovor = instr.executeQuery(upit);
+
+            while (odgovor.next()) {
+               ZipKodoviRangLista azk = new ZipKodoviRangLista();
+               azk.setZipKod(odgovor.getString("ZIP"));
+               azk.setImeGrada(odgovor.getString("CITY"));
+               azk.setBrojPodataka(0);
+               
+               popisAktivnihZipKodova.add(azk);
+            }
+            instr.close();
+        } catch (SQLException ex) {
+
+            Logger.getLogger(JelvalcicWSAPI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return popisAktivnihZipKodova;
+    }
+    
+    
+    
+    public List<MeteoPodaci> getMeteoPodaciLista(String pZipKod) {
+        
+        upit = "SELECT meteo_podaci.*, CITY FROM meteo_podaci "
+                + "INNER JOIN zip_codes ON meteo_podaci.ZIP_zahtjevani = zip_codes.ZIP "
+                + "WHERE ZIP_zahtjevani = '" + pZipKod + "' ORDER BY RBR DESC LIMIT 1;";
+        try {
+            instr = veza.createStatement();
+            odgovor = instr.executeQuery(upit);
+
+            while (odgovor.next()) {
+                MeteoPodaci mp = new MeteoPodaci();
+                mp.setZahtjevaniZipKod(odgovor.getString("ZIP_zahtjevani"));
+                mp.setVraceniZipKod(odgovor.getString("ZIP_vraceni"));
+                mp.setTlak(odgovor.getFloat("Tlak"));
+                mp.setVlaga(odgovor.getFloat("Vlaga"));
+                mp.setTemperatura(odgovor.getFloat("Temperatura"));
+                mp.setVjetar(odgovor.getFloat("Vjetar"));
+                mp.setSmjerVjetra(odgovor.getString("Smjer_vjetra"));
+                mp.setZahtjevaniGrad(odgovor.getString("CITY"));
+                
+                meteoPodaciZaZip.add(mp);
+            }
+            instr.close();
+        } catch (SQLException ex) {
+
+            Logger.getLogger(JelvalcicWSAPI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return meteoPodaciZaZip;
+    }
+    
+    public List<ZipKodoviRangLista> getRangListuZipKodova(int pBrojZipKodova){
+        upit = "SELECT COUNT(ZIP_zahtjevani) AS zipBroj, ZIP_zahtjevani, CITY " +
+                "FROM meteo_podaci " +
+                "INNER JOIN zip_codes ON zip_codes.ZIP = meteo_podaci.ZIP_zahtjevani " +
+                "GROUP BY ZIP_zahtjevani, CITY ORDER BY ZIP_zahtjevani, CITY LIMIT " + Integer.toString(pBrojZipKodova) + ";";
+        try {
+            instr = veza.createStatement();
+            odgovor = instr.executeQuery(upit);
+
+            while (odgovor.next()) {
+                ZipKodoviRangLista zkrl = new ZipKodoviRangLista();
+                zkrl.setZipKod(odgovor.getString("ZIP_zahtjevani"));
+                zkrl.setImeGrada(odgovor.getString("CITY"));
+                zkrl.setBrojPodataka(odgovor.getInt("zipBroj"));
+                
+                rangListaZipKodova.add(zkrl);
+            }
+            instr.close();
+        } catch (SQLException ex) {
+
+            Logger.getLogger(JelvalcicWSAPI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return rangListaZipKodova;
+    }
+    
+    public List<MeteoPodaci> getPopisMeteoPodatakaZaZipKod(String pZipKod, int pBrojPodataka){
+        upit = "SELECT meteo_podaci.*, CITY FROM meteo_podaci "
+                + "INNER JOIN zip_codes ON meteo_podaci.ZIP_zahtjevani = zip_codes.ZIP "
+                + "WHERE ZIP_zahtjevani = '" + pZipKod + "' ORDER BY RBR DESC LIMIT " + Integer.toString(pBrojPodataka) + ";";
+        try {
+            instr = veza.createStatement();
+            odgovor = instr.executeQuery(upit);
+
+            while (odgovor.next()) {
+                MeteoPodaci pmp = new MeteoPodaci();
+                pmp.setZahtjevaniZipKod(odgovor.getString("ZIP_zahtjevani"));
+                pmp.setVraceniZipKod(odgovor.getString("ZIP_vraceni"));
+                pmp.setTlak(odgovor.getFloat("Tlak"));
+                pmp.setVlaga(odgovor.getFloat("Vlaga"));
+                pmp.setTemperatura(odgovor.getFloat("Temperatura"));
+                pmp.setVjetar(odgovor.getFloat("Vjetar"));
+                pmp.setSmjerVjetra(odgovor.getString("Smjer_vjetra"));
+                pmp.setZahtjevaniGrad(odgovor.getString("CITY"));
+                
+                meteoPodaciZaZip.add(pmp);
+            }
+            instr.close();
+        } catch (SQLException ex) {
+
+            Logger.getLogger(JelvalcicWSAPI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return popisMeteoPodatakaZaZip;
+    }
+    
+    public List<MeteoPodaci> getMeteoPodatkeZaZipKodVremenskiInterval(String pZipKod, String pOdDatum, String pDoDatum){
+        
+        
+        upit = "SELECT meteo_podaci.*, CITY FROM meteo_podaci "
+                + "INNER JOIN zip_codes ON meteo_podaci.ZIP_zahtjevani = zip_codes.ZIP "
+                + "WHERE ZIP_zahtjevani = '" + pZipKod + "' "
+                + "AND DATE(Datum_i_vrijeme) >= '" + pOdDatum +"' "
+                + "AND DATE(Datum_i_vrijeme) <= '" + pDoDatum + "' "
+                + "ORDER BY RBR DESC ;";
+        try {
+            instr = veza.createStatement();
+            odgovor = instr.executeQuery(upit);
+
+            while (odgovor.next()) {
+                MeteoPodaci pmpvi = new MeteoPodaci();
+                pmpvi.setZahtjevaniZipKod(odgovor.getString("ZIP_zahtjevani"));
+                pmpvi.setVraceniZipKod(odgovor.getString("ZIP_vraceni"));
+                pmpvi.setTlak(odgovor.getFloat("Tlak"));
+                pmpvi.setVlaga(odgovor.getFloat("Vlaga"));
+                pmpvi.setTemperatura(odgovor.getFloat("Temperatura"));
+                pmpvi.setVjetar(odgovor.getFloat("Vjetar"));
+                pmpvi.setSmjerVjetra(odgovor.getString("Smjer_vjetra"));
+                pmpvi.setZahtjevaniGrad(odgovor.getString("CITY"));
+                
+                popisMeteoPodatakaZaZipVremenskiInterval.add(pmpvi);
+            }
+            instr.close();
+        } catch (SQLException ex) {
+
+            Logger.getLogger(JelvalcicWSAPI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return popisMeteoPodatakaZaZipVremenskiInterval;
+    }
+}

@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.2-hudson-740-. --><xs:schema xmlns:tns="http://servisi.jelvalcic.nwtis.foi.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://servisi.jelvalcic.nwtis.foi.org/">
+
+<xs:element name="vratiAktivneZipKodove" type="tns:vratiAktivneZipKodove" />
+
+<xs:element name="vratiAktivneZipKodoveResponse" type="tns:vratiAktivneZipKodoveResponse" />
+
+<xs:element name="vratiMeteoPodatkeZaZip" type="tns:vratiMeteoPodatkeZaZip" />
+
+<xs:element name="vratiMeteoPodatkeZaZipResponse" type="tns:vratiMeteoPodatkeZaZipResponse" />
+
+<xs:element name="vratiPopisMeteoPodatakaVremenskiInterval" type="tns:vratiPopisMeteoPodatakaVremenskiInterval" />
+
+<xs:element name="vratiPopisMeteoPodatakaVremenskiIntervalResponse" type="tns:vratiPopisMeteoPodatakaVremenskiIntervalResponse" />
+
+<xs:element name="vratiPopisMeteoPodatakaZaZip" type="tns:vratiPopisMeteoPodatakaZaZip" />
+
+<xs:element name="vratiPopisMeteoPodatakaZaZipResponse" type="tns:vratiPopisMeteoPodatakaZaZipResponse" />
+
+<xs:element name="vratiRangListuZipKodova" type="tns:vratiRangListuZipKodova" />
+
+<xs:element name="vratiRangListuZipKodovaResponse" type="tns:vratiRangListuZipKodovaResponse" />
+
+<xs:complexType name="vratiRangListuZipKodova">
+<xs:sequence>
+<xs:element name="brojZipKodova" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="vratiRangListuZipKodovaResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:zipKodoviRangLista" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="zipKodoviRangLista">
+<xs:sequence>
+<xs:element name="brojPodataka" type="xs:int" />
+<xs:element name="imeGrada" type="xs:string" minOccurs="0" />
+<xs:element name="zipKod" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="vratiMeteoPodatkeZaZip">
+<xs:sequence>
+<xs:element name="zipKod" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="vratiMeteoPodatkeZaZipResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:meteoPodaci" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="meteoPodaci">
+<xs:sequence>
+<xs:element name="smjerVjetra" type="xs:string" minOccurs="0" />
+<xs:element name="temperatura" type="xs:float" />
+<xs:element name="tlak" type="xs:float" />
+<xs:element name="vjetar" type="xs:float" />
+<xs:element name="vlaga" type="xs:float" />
+<xs:element name="vraceniGrad" type="xs:string" minOccurs="0" />
+<xs:element name="vraceniZipKod" type="xs:string" minOccurs="0" />
+<xs:element name="zahtjevaniGrad" type="xs:string" minOccurs="0" />
+<xs:element name="zahtjevaniZipKod" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="vratiPopisMeteoPodatakaZaZip">
+<xs:sequence>
+<xs:element name="zipKod" type="xs:string" minOccurs="0" />
+<xs:element name="brojPodataka" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="vratiPopisMeteoPodatakaZaZipResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:meteoPodaci" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="vratiAktivneZipKodove">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="vratiAktivneZipKodoveResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:zipKodoviRangLista" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="vratiPopisMeteoPodatakaVremenskiInterval">
+<xs:sequence>
+<xs:element name="zipKod" type="xs:string" minOccurs="0" />
+<xs:element name="odDatum" type="xs:string" minOccurs="0" />
+<xs:element name="doDatum" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="vratiPopisMeteoPodatakaVremenskiIntervalResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:meteoPodaci" minOccurs="0" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

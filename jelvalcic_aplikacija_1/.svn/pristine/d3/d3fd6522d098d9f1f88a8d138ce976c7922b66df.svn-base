@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="http://api.wxbug.net/weatherservice.asmx?WSDL" uri="wsdl/api.wxbug.net/weatherservice.asmx.wsdl"/>
+    <system systemId="http://localhost:8080/jelvalcic_aplikacija_1/JelvalcicAplikacija1WS?wsdl" uri="wsdl/localhost_8080/jelvalcic_aplikacija_1/JelvalcicAplikacija1WS.wsdl"/>
+    <system systemId="http://localhost:8080/jelvalcic_aplikacija_1/JelvalcicAplikacija1WS?xsd=1" uri="wsdl/localhost_8080/jelvalcic_aplikacija_1/JelvalcicAplikacija1WS.xsd_1.xsd"/>
+</catalog>
