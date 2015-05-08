@@ -1,3 +1,4 @@
+#NWTiS
 Acronym NWTIS stands for Napredne Web Tehnologije i Servisi, translated to: Advanced Web Technologies and Services
 
 Used technologies: J2EE, Glassfish, apache, james mail server, JSF, MVC, multithreading, socket programing etc etc
